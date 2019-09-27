@@ -1,0 +1,38 @@
+-----------------------------
+INSERT INTO ceshi (
+	id,
+	plan_no,
+	end_time,
+	stat_time,
+	create_time
+)
+VALUES
+	(
+		'2',
+		'132',
+		str_to_date (
+			'2009-06-08 23:53:17','%Y-%m-%d %H:%i:%s'
+		),
+		str_to_date (
+			'2009-06-08 23:53:17','%Y-%m-%d %H:%i:%s'
+		),
+		str_to_date (
+		'2009-06-08 23:53:17','%Y-%m-%d'
+		)
+	) 
+------------------------------------
+SELECT
+		*
+	FROM
+		ceshi
+	WHERE
+DATE_FORMAT(create_time, '%Y-%m-%d-%T') = ' 2019 ' 
+-----------------------------
+SELECT
+
+			DATE_FORMAT(
+				stat_time,
+				'%Y-%m-%d'
+			)
+		FROM
+			ceshi

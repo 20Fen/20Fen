@@ -1,0 +1,68 @@
+package com.hollysys.smartfactory.equipmentdiagnosis.system.service.impl;
+
+import java.sql.*;
+import java.util.UUID;
+
+/**
+ * Description:  向数据库批量插入数据
+
+ * @date 2019年09月18日 11:20
+ * Version 1.0
+ */
+public class MysqlTest {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        final String driver = "org.postgresql.Driver";
+        final String url = "jdbc:postgresql://172.21.32.62:5432/equipment_diagnosis";
+        final String user = "admin";
+        final String password = "123456";
+
+        Class.forName(driver);
+        Connection conn = DriverManager.getConnection(url, user, password);
+        if (null != conn) {
+            System.out.println("连接成功");
+            insert(conn);
+        } else {
+            System.out.println("连接失败");
+        }
+
+    }
+
+    private static void insert(Connection conn) throws SQLException {
+
+// 开始时间
+        Long stat = System.currentTimeMillis();
+//编写sql
+        String prefix = "INSERT INTO service_diag_plan_process (pkid,plan_no,operator,operate_content,explain,create_time,plan_status) VALUES ";
+//创建StringBuilder
+        StringBuilder builder = new StringBuilder();
+//关闭自动事务
+        conn.setAutoCommit(false);
+//编译sql
+        //PreparedStatement statement = conn.prepareStatement("");
+        Statement statement = conn.createStatement();
+
+        for (int i = 0; i <= 1; i++) {
+
+            builder = new StringBuilder();
+//拼接sql
+            for (int j = 0; j <= 10; j++) {
+                builder.append("('" + UUID.randomUUID() + "','" + i * j + "','123'" + ",'456'" + ",'789'" + ",'2016-08-12 14:43:26'" + ",'测试'" + "),");
+            }
+            String sql = prefix + builder.substring(0, builder.length() - 1);
+//添加sql
+            statement.addBatch(sql);
+//统一执行
+            statement.executeBatch();
+            conn.commit();
+            builder = new StringBuilder();
+        }
+        statement.close();
+        conn.close();
+
+        // 结束时间
+        Long end = System.currentTimeMillis();
+        System.out.println("数据插入时间:" + (end - stat) / 1000 + "s");
+
+    }
+
+}

@@ -1,0 +1,121 @@
+package com.hollysys.smartfactory.equipmentdiagnosis.system.service.impl;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Description:
+ *
+ * @author yangfl
+ * @date 2019年09月16日 17:57
+ * Version 1.0
+ */
+public class test {
+    public static void main(String[] args) throws ParseException {
+
+//        List<String> list=Arrays.asList("1","2","","4","5","6","7","8","");
+//        list.stream().filter(s -> !s.isEmpty()).forEach(System.out :: println);
+//
+//        List<Integer> list1=Arrays.asList(1,2,3,4,56,8,87,5);
+//        list1.stream().map(s -> s * s).sorted().forEach(System.out :: println);
+//保留两位小数
+        Double d = 12.1254;
+        System.out.println(Double.valueOf(String.format("%.2f", d)));
+
+        //倒叙输出
+        String a="123456789";
+        for (int i = a.length(); i >= 0; i--) {
+            System.out.print(i);
+        }
+
+        StringBuilder b=new StringBuilder(a);
+        System.out.println(b.reverse());
+        ;
+
+//
+        List<String> list2= Arrays.asList("asdad1sadasdasd,asdas,dasd,asdas,d");
+        Map<String[], String[]> ss = list2.stream().map(x -> x.split(",")).collect(Collectors.toMap(x->x, x->x));
+        List<String[]> collect = list2.stream().map(x -> x.split(",")).collect(Collectors.toList());
+
+//    Path path = FileSystems.getDefault().getPath("C:/tutorial/photos", "Demo.jpg");
+//
+//    //delete if exists
+//    try {
+//        boolean success = Files.deleteIfExists(path);
+//        if(!success){
+//            throw new CustomException("124345");
+//        }
+//        System.out.println("Delete status: " + success);
+//    } catch (IOException e) {
+//        System.err.println(e);
+//    }
+
+        String date = getDate();
+        String oldDate = getOldDate(date);
+        System.out.println("start=" + date);
+        System.out.println("end=" + oldDate);
+        String s = getPreviousMonthDayBegin();
+        System.out.println(s);
+        String end = getPreviousMonthDayEnd();
+        System.out.println(end);
+
+
+    }
+    //非静态方法可以调用静态方法，也可以调用非晶态方法
+    //静态方法不可以调用非静态方法，只能调用静态方法
+
+    //获取当前时间
+    public static String getDate() throws ParseException {
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        Date parse = df.parse("2019-9-30");// new Date()为获取当前系统时间
+        return df.format(parse);// new Date()为获取当前系统时间
+    }
+
+    //获取上个月的今天
+    public static String getOldDate(String date) throws ParseException {
+//     设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (StringUtils.isEmpty(date)) {
+            return getDate();
+        }
+//    Calendar类是一个抽象类，里面有getInstance()方法
+        Calendar ins = Calendar.getInstance();
+//当前月份-1
+        ins.add(Calendar.MONTH, -1);
+//得到当前月份的天
+        Integer day = Integer.valueOf(StringUtils.substring(date, StringUtils.lastIndexOf(date, "-") + 1, date.length()));
+        ins.set(Calendar.DATE, day);
+//获取到上个月的时间
+        String lastMonthStart = df.format(ins.getTime());
+        ins.clear();
+        return lastMonthStart;
+    }
+
+    //    获取上个月的时间
+    public static String getPreviousMonthDayBegin() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        String startTime = format.format(calendar.getTime()) + " 00:00:00";
+        return startTime;
+    }
+
+    //    获取上个月的结束时间
+    public static String getPreviousMonthDayEnd() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 0);
+        String str = sf.format(calendar.getTime()) + " 23:59:59";
+        return str;
+    }
+
+
+}
+

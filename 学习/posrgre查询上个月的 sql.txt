@@ -1,0 +1,36 @@
+=====postgrep===============
+---------------指定日期-----------------
+SELECT
+	*
+FROM
+	equipment_diagnosis t
+WHERE
+to_char(t.diagnostic_time,'yyyyMMdd hh') = '20190611 09'
+
+------------------在什么之间------------------
+SELECT
+	*
+FROM
+	service_health_plan t
+WHERE
+	to_char(t.start_date,'YYYY/MM') between '2019/07' and '2019/08' or to_char(t.end_date,'YYYY/MM') between '2019/08' and '2019/10'
+
+---------------在什么之间----------------------
+SELECT
+	A .*
+FROM
+	service_diagnosis_plan A
+WHERE
+	(
+		(
+			TO_TIMESTAMP('20190901', 'yyyymmdd') BETWEEN A .start_date
+			AND A .end_date
+		)
+		OR (
+			TO_TIMESTAMP('2019-09-30', 'yyyy-mm-dd') BETWEEN A .start_date
+			AND A .end_date
+		)
+	)
+ORDER BY
+	A .plan_no DESC
+LIMIT 13

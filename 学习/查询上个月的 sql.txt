@@ -1,0 +1,21 @@
+=====postgrep===============
+---------------指定日期-----------------
+SELECT
+	*
+FROM
+	equipment_diagnosis t
+WHERE
+to_char(t.diagnostic_time,'yyyyMMdd hh') = '20190611 09'
+
+------------------在什么之间------------------
+SELECT
+	*
+FROM
+	service_health_plan t
+WHERE
+	to_char(t.start_date,'YYYY/MM') between '2019/07' and '2019/08' or to_char(t.end_date,'YYYY/MM') between '2019/08' and '2019/10'
+
+---------------------------------------------
+insert
+
+to_timestamp(#{item.createTime,jdbcType=VARCHAR},'YYYY-MM-DD HH24:MI:SS'),

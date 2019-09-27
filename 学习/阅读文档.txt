@@ -1,0 +1,48 @@
+﻿http://www.ruanyifeng.com/blog/    阮一峰
+
+https://www.cnblogs.com/Jansens520/p/7825674.html   redis集群的搭建及简单使用
+
+https://www.runoob.com/java/java8-streams.html    java8 新特性
+
+https://www.jianshu.com/p/15781ec742f2            mybatis架构和原理
+
+https://blog.csdn.net/umbrellasoft/article/details/81805954   spring框架原理
+                                                              springMVC框架原理
+https://www.cnblogs.com/chengyangyang/p/9431592.html   批量上传
+
+https://segmentfault.com/a/1190000009892006       全栈开发——动手打造属于自己的直播间  
+
+--------------博客园加密--------------------------------------
+https://www.cnblogs.com/sunny3096/p/7159653.html
+
+================vue的常用经典案例开源项目====================
+https://blog.csdn.net/wh8_2011/article/details/80497620
+
+================vue-resource 陈慧超==============================
+https://www.cnblogs.com/chenhuichao/p/8308993.html
+
+--------------------------视频项目----------------------------------------------------
+https://segmentfault.com/a/1190000009892006
+
+----------------------------------docker--------------------------------------------
+http://www.cnblogs.com/kevingrace/p/6590319.html
+
+---------------------------------排序算法-----------------------------------------
+https://www.cnblogs.com/onepixel/articles/7674659.html
+
+----------------------------------邮件发送----------------------------------------
+https://blog.csdn.net/lili72/article/details/7491201
+
+https://blog.csdn.net/imain/article/details/1453677
+https://blog.csdn.net/qq_32371887/article/details/72821291
+
+---------------------------------------------------------------------------------
+
+---------------------------------shiro和缓存-------------------------------------
+https://www.cnblogs.com/zfding/p/8536480.html
+
+------------------------------------freemark---------------------------------------------------
+https://www.sojson.com/jc_shiro_ssm_ehcache.html
+
+-------------jeesite=====github-------------------------------
+https://github.com/thinkgem/jeesite4

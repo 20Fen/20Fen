@@ -1,0 +1,154 @@
+@RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public String upLoad(HttpServletRequest request){
+		FileOutputStream out = null;
+		InputStream in = null;
+		FileItem fileItem = null;
+		//定义上传文件的拓展
+		String extName = "gif,jpg,jpeg,png,bmp,swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb,doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2";
+		//获得上传的路径，不允许直接访问该路径
+		String path = request.getSession().getServletContext().getRealPath("WEB-INF/upload");
+		//创建一个文件
+		File file = new File(path);
+		//判断文件是否存在
+		if(!file.exists()){
+			//创建文件夹
+			file.mkdirs();
+		}
+		
+		//上传时生成临时的文件保存目录
+		String temPath = request.getSession().getServletContext().getRealPath("WEB-INF/tem");
+		//创建一个文件
+		File temfile = new File(temPath);
+		//判断文件是否存在
+		if(!temfile.exists()){
+			//创建文件夹
+			temfile.mkdirs();
+		}
+		
+		String message = "";	
+		//使用Apache 文件的上传组件步骤：
+		//1.创建一个DiskFileItemFactory工厂
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		//设置缓存大小默认值为10kB
+		factory.setSizeThreshold(1024 * 10);
+		//设置上传文件生成的临时文件的目录
+		factory.setRepository(temfile);
+		
+		//创建一个上传解析器
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		//监听文件上传进度
+		upload.setProgressListener(new ProgressListener() {
+			
+			public void update(long pBytesRead, long pContentLength, int pItems) {
+				System.out.println("当前已处理："+pBytesRead+"------文件大小为："+pContentLength+"----"+pItems);
+				
+			}
+		});
+		
+		//解决上传文件名的乱码问题
+		upload.setHeaderEncoding("utf-8");
+		 // 3.判断提交上来的数据是否是上传表单的数据
+		             if (!ServletFileUpload.isMultipartContent(request)) {
+		                // 按照传统方式获取数据
+		                 return null;
+		             }
+		//设置单个文件的最大值
+		upload.setFileSizeMax(1024 * 1024 * 1);
+		//设置本次上传文件的最大值
+		upload.setSizeMax(1024 * 1024 * 10);
+		
+		try {
+			List item = upload.parseRequest(request);
+			for(int i = 0;i < item.size();i++){
+				fileItem = (FileItem)item.get(i);
+				if(fileItem.isFormField()){//如果它封装的是普通的输入数据
+					String name = fileItem.getName();
+					 // 解决普通输入项数据中文乱码问题
+					String value = fileItem.getString();
+					 // value = new String(value.getBytes("iso8859-1"),"UTF-8");
+					System.out.println(name+ "=" +value);
+					
+				}else{
+					//得到上传文件的名称
+					String fileName = fileItem.getName();
+					System.out.println("文件名："+fileName);
+					if (fileName == null && fileName.trim().length() == 0) {
+						continue;
+					} 
+					// 处理获取到的上传文件的文件名的路径部分，只保留文件名部分
+					fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+					// 得到上传文件的扩展名
+					String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+					//检查扩展名是否合法
+					if(!extName.contains(fileExt)){
+						System.out.println("上传文件扩展名是不允许的扩展名：" + fileExt);
+						message = message + "文件：" + fileName + "，上传文件扩展名是不允许的扩展名：" + fileExt+ "<br/>";
+						break;
+					}
+					 // 检查文件大小
+					if(fileItem.getSize() == 0) continue;
+					if(fileItem.getSize() > upload.getFileSizeMax()){
+					System.out.println("上传文件大小：" + fileItem.getSize());
+					message = message + "文件：" + fileName + "，上传文件大小超过限制大小：" + upload.getFileSizeMax() + "<br/>";
+					break;
+					}
+					//得到存文件的文件名称
+					String saveFileName = UUID.randomUUID().toString().replaceAll("-", "") + "_" + fileName;
+					//保存方法1获得item中上传文件的输入流
+					in = fileItem.getInputStream();
+					//创建一个文件输出流
+					out = new FileOutputStream(path + "\\" + saveFileName);
+					System.out.println(path + "\\" + saveFileName);
+					//创建一个缓冲区
+					byte buffer[] = new byte[1024];
+					//判断输入流中的数据是否已经读完
+					int len = 0;
+					while((len = in.read(buffer)) > 0){
+						out.write(buffer,0,len);
+					}
+					 //关闭输出流
+					//out.close();
+					//关闭输入流
+					//in.close();
+					//删除临时文件
+					//fileItem.delete();
+					message = message + "文件：" + fileName + "，上传成功<br/>";
+					System.out.println(message);
+					//保存文件方法二
+					//File uploadedFile = new File(path, saveFileName);
+					//item.write(uploadedFile);
+					
+				}
+			}
+			
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			 //关闭输出流
+			if(out != null){
+			try {
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+			//关闭输入流
+			if(in != null){
+			try {
+				in.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+			//删除临时文件
+			fileItem.delete();
+		}
+		
+        return "test";
+	}
